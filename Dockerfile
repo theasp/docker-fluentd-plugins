@@ -10,9 +10,7 @@ RUN set -ex ; \
    cat /etc/apt/sources.list ; \
    apt-get update -q; \
    apt-cache search '.*mysql.*-dev' ; \
-   apt-get install -qy --no-install-recommends $BUILD_DEPS
-
-RUN set -ex ; \
+   apt-get install -qy --no-install-recommends $BUILD_DEPS; \
    gem search ^fluent-plugin- | cut -f 1 -d ' ' | xargs -r sudo gem install || true ; \
    sudo gem sources --clear-all ; \
    apt-get purge -qy $(dpkg-query --show --showformat '${Package}\n' '*-dev')
