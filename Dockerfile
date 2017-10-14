@@ -1,4 +1,4 @@
-FROM fluent/fluentd:stable-debian
+FROM fluent/fluentd:edge-debian
 
 # below RUN includes plugin as examples elasticsearch is not required
 # you may customize including plugins as you wish
