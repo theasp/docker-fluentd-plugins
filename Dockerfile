@@ -3,7 +3,7 @@ FROM fluent/fluentd:stable-debian
 # below RUN includes plugin as examples elasticsearch is not required
 # you may customize including plugins as you wish
 
-ENV BUILD_DEPS="sudo make gcc g++ rake patch libc-dev ruby-dev zlib1g-dev libcurl4-openssl-dev libpq-dev libssl-dev libsqlite3-dev"
+ENV BUILD_DEPS="sudo make gcc g++ rake patch libc-dev ruby-dev zlib1g-dev libcurl4-openssl-dev libpq-dev libssl-dev libsqlite3-dev libmysqlclient-dev libgeoip-dev libsasl2-dev libxml2-dev"
 
 RUN set -ex ; \
    apt-get update ; \
