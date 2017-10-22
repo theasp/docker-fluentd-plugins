@@ -11,7 +11,7 @@ RUN set -ex ; \
    apt-get update -q; \
    apt-cache search '.*mysql.*-dev' ; \
    apt-get install -qy --no-install-recommends $BUILD_DEPS; \
-   gem search ^fluent-plugin- | cut -f 1 -d ' ' | xargs -r sudo gem install || true ; \
+   gem search ^fluent-plugin- | cut -f 1 -d ' ' | xargs -r sudo gem install yajl-ruby || true ; \
    sudo gem sources --clear-all ; \
    apt-get purge -qy $(dpkg-query --show --showformat '${Package}\n' '*-dev'); \
    # SUDO_FORCE_REMOVE=yes apt-get purge -qy --auto-remove -o APT::AutoRemove::RecommendsImportant=false $BUILD_DEPS ; \
