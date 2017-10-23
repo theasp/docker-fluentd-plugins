@@ -1,0 +1,13 @@
+---
+version: 2
+jobs:
+  build:
+    steps:
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run: |
+          docker image build -t theasp/fluentd-plugins:common -f Dockerfile-common .
+          docker image build -t theasp/fluentd-plugins:all -f Dockerfile-all .
+          docker login -u $DOCKER_USER -p $DOCKER_PASS
+          docker push theasp/fluentd-plugins:all
+          docker push theasp/fluentd-plugins:common
