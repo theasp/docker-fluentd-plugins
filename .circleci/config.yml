@@ -32,9 +32,10 @@ jobs:
 workflows:
   version: 2
   build-test-and-deploy:
-    - build-common
-    - build-all
-    - deploy:
-        requires:
-          - build-common
-          - build-all
+    jobs:
+      - build-common
+      - build-all
+      - deploy:
+          requires:
+            - build-common
+            - build-all
