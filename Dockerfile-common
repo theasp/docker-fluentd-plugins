@@ -143,7 +143,6 @@ record-modifier \
 record-reformer \
 redis \
 redis-counter \
-redshift \
 reemit \
 referer-parser \
 remote_syslog \
