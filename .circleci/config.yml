@@ -8,7 +8,10 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - checkout
-      - run: docker image build -t theasp/fluentd-plugins:common -f Dockerfile-common .
+      - run: |
+          docker image build -t theasp/fluentd-plugins:common -f Dockerfile-common .
+          echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+          docker push theasp/fluentd-plugins:common
 
   build-all:
     docker:
@@ -17,26 +20,14 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - checkout
-      - run: docker image build -t theasp/fluentd-plugins:all -f Dockerfile-all .
-
-  deploy:
-    docker:
-      - image: docker
-    steps:
-      - setup_remote_docker:
-          docker_layer_caching: true
       - run: |
+          docker image build -t theasp/fluentd-plugins:all -f Dockerfile-all .
           echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-          docker push theasp/fluentd-plugins:common
           docker push theasp/fluentd-plugins:all
 
 workflows:
   version: 2
-  build-test-and-deploy:
+  build:
     jobs:
       - build-common
       - build-all
-      - deploy:
-          requires:
-            - build-common
-            - build-all
