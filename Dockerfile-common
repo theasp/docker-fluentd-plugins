@@ -28,6 +28,7 @@ cloudwatch-ingest \
 cloudwatch-logs \
 cloudwatch_ya \
 collectd-influxdb \
+collectd-unroll \
 concat \
 config-expander \
 copy_ex \
