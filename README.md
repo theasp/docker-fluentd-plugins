@@ -60,7 +60,6 @@ The (possibly outdated) list of plugins included in `latest` is:
 - file-alternative
 - file-sprintf
 - filter
-- filter-geoip
 - filter-parse-postfix
 - filter-record-map
 - filter_typecast
@@ -74,7 +73,6 @@ The (possibly outdated) list of plugins included in `latest` is:
 - forward-aws
 - gcloud-pubsub-custom
 - geoblipper
-- geoip
 - google-cloud
 - graphite
 - grassland
