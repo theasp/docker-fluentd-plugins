@@ -13,10 +13,8 @@ RUN set -ex ; \
      | cut -f 2- -d = \
      | sed -e 's/;$//' \
      | jq -r 'map(select(.obsolete != true and (.certified|length) > 0)) | .[].name | @text' > /plugins-installed; \
-   ls -l /plugins-installed; \
    test -s /plugins-installed; \
    xargs -r gem install < /plugins-installed; \
-   sudo gem sources --clear-all ; \
+   gem sources --clear-all ; \
    apt-get purge -qy $(dpkg-query --show --showformat '${Package}\n' '*-dev'); \
-   # SUDO_FORCE_REMOVE=yes apt-get purge -qy --auto-remove -o APT::AutoRemove::RecommendsImportant=false $BUILD_DEPS ; \
    rm -rf /var/lib/apt/lists/* /home/fluent/.gem/ruby/*/cache/*.gem /tmp/plugins
