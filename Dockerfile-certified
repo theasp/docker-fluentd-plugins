@@ -8,11 +8,18 @@ RUN set -ex ; \
    apt-get update -q; \
    apt-cache search '.*mysql.*-dev' ; \
    apt-get install -qy --no-install-recommends $BUILD_DEPS; \
+   curl -s https://www.fluentd.org/plugins; \
+   curl -s https://www.fluentd.org/plugins \
+     | grep '^var plugins'\
+     | cut -f 2- -d = \
+     | sed -e 's/;$//' \
+     | jq -r 'map(select(.obsolete != true and (.certified|length) > 0)) | .[].name | @text'; \
    curl -s  https://www.fluentd.org/plugins \
      | grep '^var plugins'\
      | cut -f 2- -d = \
      | sed -e 's/;$//' \
      | jq -r 'map(select(.obsolete != true and (.certified|length) > 0)) | .[].name | @text' > /plugins-installed; \
+   ls -l /plugins-installed; \
    test -s /plugins-installed; \
    xargs -r sudo gem install < /plugins-installed; \
    sudo gem sources --clear-all ; \
