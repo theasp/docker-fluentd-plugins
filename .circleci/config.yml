@@ -55,6 +55,8 @@ workflows:
     jobs:
       - build-certified
       - build-slim:
-          requires: build-certified
+          requires:
+            - build-certified
       - build-common:
-          requires: build-slim
+          requires:
+            - build-slim
