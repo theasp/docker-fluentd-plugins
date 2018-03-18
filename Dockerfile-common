@@ -1,6 +1,6 @@
 FROM theasp/fluentd-plugins:slim
 
-ENV BUILD_DEPS="jq curl sudo make gcc g++ rake patch libc-dev ruby-dev zlib1g-dev libcurl4-openssl-dev libpq-dev libssl-dev libsqlite3-dev default-libmysqlclient-dev libgeoip-dev libsasl2-dev libxml2-dev libffi-dev"
+ENV BUILD_DEPS="jq curl make gcc g++ rake patch libc-dev ruby-dev zlib1g-dev libcurl4-openssl-dev libpq-dev libssl-dev libsqlite3-dev default-libmysqlclient-dev libgeoip-dev libsasl2-dev libxml2-dev libffi-dev"
 
 RUN set -ex; \
    sed -r -i -e 's! main! main contrib non-free!g' /etc/apt/sources.list; \
@@ -8,13 +8,13 @@ RUN set -ex; \
    apt-get update -q; \
    apt-cache search '.*mysql.*-dev' ; \
    apt-get install -qy --no-install-recommends $BUILD_DEPS; \
-   curl -s  https://www.fluentd.org/plugins \
-     | grep '^var plugins'\
+   curl -s https://www.fluentd.org/plugins \
+     | grep '^  var plugins'\
      | cut -f 2- -d = \
      | sed -e 's/;$//' \
      | jq -r 'map(select(.obsolete != true and (.downloads > 5000 or (.certified|length) > 0)) | .[].name | @text' > /tmp/plugins-common; \
    test -s /plugins-common; \
-   xargs -r sudo gem install < /plugins-common; \
+   xargs -r gem install < /plugins-common; \
    sort -u /plugins-installed /tmp/plugins-common > /plugins-installed.new; \
    mv /plugins-installed.new /plugins-installed; \
    gem sources --clear-all; \
