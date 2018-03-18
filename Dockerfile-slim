@@ -3,8 +3,6 @@ FROM theasp/fluentd-plugins:certified
 ENV BUILD_DEPS="jq curl make gcc g++ rake patch libc-dev ruby-dev zlib1g-dev libcurl4-openssl-dev libpq-dev libssl-dev libsqlite3-dev default-libmysqlclient-dev libgeoip-dev libsasl2-dev libxml2-dev libffi-dev libmaxminddb-dev"
 
 RUN set -ex ; \
-   sed -r -i -e 's! main! main contrib non-free!g' /etc/apt/sources.list; \
-   cat /etc/apt/sources.list ; \
    apt-get update -q; \
    apt-cache search '.*mysql.*-dev' ; \
    apt-get install -qy --no-install-recommends $BUILD_DEPS; \
@@ -12,7 +10,7 @@ RUN set -ex ; \
      | grep '^  var plugins'\
      | cut -f 2- -d = \
      | sed -e 's/;$//' \
-     | jq -r 'map(select(.obsolete != true and (.downloads > 20000 or (.certified|length) > 0)) | .[].name | @text' > /tmp/plugins-slim; \
+     | jq -r 'map(select(.obsolete != true and (.downloads > 20000 or (.certified|length) > 0))) | .[].name | @text' > /tmp/plugins-slim; \
    test -s /tmp/plugins-slim; \
    xargs -r gem install < /tmp/plugins-slim; \
    sort -u /plugins-installed /tmp/plugins-slim > /plugins-installed.new; \
