@@ -1,6 +1,30 @@
 ---
 version: 2
 jobs:
+  build-certified:
+    docker:
+      - image: docker
+    steps:
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - checkout
+      - run: |
+          docker image build -t theasp/fluentd-plugins:certified -f Dockerfile-certified .
+          echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+          docker push theasp/fluentd-plugins:certified
+
+  build-slim:
+    docker:
+      - image: docker
+    steps:
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - checkout
+      - run: |
+          docker image build -t theasp/fluentd-plugins:slim -f Dockerfile-slim .
+          echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+          docker push theasp/fluentd-plugins:slim
+
   build-common:
     docker:
       - image: docker
@@ -13,21 +37,24 @@ jobs:
           echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
           docker push theasp/fluentd-plugins:latest
 
-  build-all:
-    docker:
-      - image: docker
-    steps:
-      - setup_remote_docker:
-          docker_layer_caching: true
-      - checkout
-      - run: |
-          docker image build -t theasp/fluentd-plugins:all -f Dockerfile-all .
-          echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-          docker push theasp/fluentd-plugins:all
+  # build-all:
+  #   docker:
+  #     - image: docker
+  #   steps:
+  #     - setup_remote_docker:
+  #         docker_layer_caching: true
+  #     - checkout
+  #     - run: |
+  #         docker image build -t theasp/fluentd-plugins:all -f Dockerfile-all .
+  #         echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+  #         docker push theasp/fluentd-plugins:all
 
 workflows:
   version: 2
   build:
     jobs:
-      - build-common
-      - build-all
+      - build-certified
+      - build-slim:
+          requires: build-certified
+      - build-common:
+          requires: build-slim
