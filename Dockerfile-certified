@@ -1,6 +1,6 @@
 FROM fluent/fluentd:edge-debian
 
-ENV BUILD_DEPS="jq curl make gcc g++ rake patch libc-dev ruby-dev zlib1g-dev libcurl4-openssl-dev libpq-dev libssl-dev libsqlite3-dev default-libmysqlclient-dev libgeoip-dev libsasl2-dev libxml2-dev"
+ENV BUILD_DEPS="jq curl make gcc g++ rake patch libc-dev ruby-dev zlib1g-dev libcurl4-openssl-dev libpq-dev libssl-dev libsqlite3-dev default-libmysqlclient-dev libgeoip-dev libsasl2-dev libxml2-dev libffi-dev libmaxminddb-dev"
 
 RUN set -ex ; \
    sed -r -i -e 's! main! main contrib non-free!g' /etc/apt/sources.list; \
