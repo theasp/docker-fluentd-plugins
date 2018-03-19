@@ -1,6 +1,6 @@
 FROM theasp/fluentd-plugins:slim
 
-ENV BUILD_DEPS="jq curl make gcc g++ rake patch libc-dev ruby-dev zlib1g-dev libcurl4-openssl-dev libpq-dev libssl-dev libsqlite3-dev default-libmysqlclient-dev libgeoip-dev libsasl2-dev libxml2-dev libffi-dev libmaxminddb-dev"
+ENV BUILD_DEPS="jq curl make gcc g++ rake patch libc-dev ruby-dev zlib1g-dev libcurl4-openssl-dev libpq-dev libssl-dev libsqlite3-dev default-libmysqlclient-dev libgeoip-dev libsasl2-dev libxml2-dev libffi-dev libmaxminddb-dev ruby-aws-sdk"
 
 RUN set -ex; \
    apt-get update -q; \
@@ -10,7 +10,8 @@ RUN set -ex; \
      | grep '^  var plugins' \
      | cut -f 2- -d = \
      | sed -e 's/;$//' \
-     | jq -r 'map(select(.obsolete != true and (.downloads > 5000 or (.certified|length) > 0))) | .[].name | @text' > /tmp/plugins-common; \
+     | jq -r 'map(select(.obsolete != true and (.downloads > 5000 or (.certified|length) > 0))) | .[].name | @text' \
+     | egrep -v '^fluent-plugin-(chef-client|grassland|mysql-binlog|monolog)$' > /tmp/plugins-common; \
    test -s /tmp/plugins-common; \
    xargs -r gem install < /tmp/plugins-common; \
    sort -u /plugins-installed /tmp/plugins-common > /plugins-installed.new; \
