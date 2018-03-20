@@ -33,9 +33,12 @@ jobs:
           docker_layer_caching: true
       - checkout
       - run: |
-          docker image build -t theasp/fluentd-plugins:latest -f Dockerfile-common .
+          docker image build -t theasp/fluentd-plugins:common -f Dockerfile-common .
           echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+          docker tag theasp/fluentd-plugins:common theasp/fluentd-plugins:latest
+          docker push theasp/fluentd-plugins:common
           docker push theasp/fluentd-plugins:latest
+
 
   # build-all:
   #   docker:
