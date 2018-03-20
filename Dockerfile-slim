@@ -4,7 +4,6 @@ ENV BUILD_DEPS="jq curl make gcc g++ rake patch libc-dev ruby-dev zlib1g-dev lib
 
 RUN set -ex; \
    apt-get update -q; \
-   apt-cache search '.*mysql.*-dev' ; \
    apt-get install -qy --no-install-recommends $BUILD_DEPS; \
    curl -s https://www.fluentd.org/plugins \
      | grep '^  var plugins' \

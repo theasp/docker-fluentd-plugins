@@ -6,7 +6,6 @@ RUN set -ex ; \
    sed -r -i -e 's! main! main contrib non-free!g' /etc/apt/sources.list; \
    cat /etc/apt/sources.list ; \
    apt-get update -q; \
-   apt-cache search '.*mysql.*-dev' ; \
    apt-get install -qy --no-install-recommends $BUILD_DEPS; \
    curl -s https://www.fluentd.org/plugins \
      | grep '^  var plugins'\
