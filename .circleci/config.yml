@@ -10,7 +10,6 @@ jobs:
       - run: |
           docker image build -t theasp/fluentd-plugins:certified -f Dockerfile-certified .
           echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-      - deploy: |
           docker push theasp/fluentd-plugins:certified
 
   slim:
@@ -22,7 +21,6 @@ jobs:
       - run: |
           docker image build -t theasp/fluentd-plugins:slim -f Dockerfile-slim .
           echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-      - deploy: |
           docker push theasp/fluentd-plugins:slim
 
   common:
@@ -35,7 +33,6 @@ jobs:
           docker image build -t theasp/fluentd-plugins:common -f Dockerfile-common .
           echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
           docker tag theasp/fluentd-plugins:common theasp/fluentd-plugins:latest
-      - deploy: |
           docker push theasp/fluentd-plugins:common
           docker push theasp/fluentd-plugins:latest
 
