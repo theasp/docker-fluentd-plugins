@@ -1,51 +1,50 @@
 ---
 version: 2
 jobs:
-  build-certified:
+  certified:
     docker:
       - image: docker
     steps:
-      - setup_remote_docker:
-          docker_layer_caching: true
+      - setup_remote_docker
       - checkout
       - run: |
           docker image build -t theasp/fluentd-plugins:certified -f Dockerfile-certified .
           echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+      - deploy: |
           docker push theasp/fluentd-plugins:certified
 
-  build-slim:
+  slim:
     docker:
       - image: docker
     steps:
-      - setup_remote_docker:
-          docker_layer_caching: true
+      - setup_remote_docker
       - checkout
       - run: |
           docker image build -t theasp/fluentd-plugins:slim -f Dockerfile-slim .
           echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+      - deploy: |
           docker push theasp/fluentd-plugins:slim
 
-  build-common:
+  common:
     docker:
       - image: docker
     steps:
-      - setup_remote_docker:
-          docker_layer_caching: true
+      - setup_remote_docker
       - checkout
       - run: |
           docker image build -t theasp/fluentd-plugins:common -f Dockerfile-common .
           echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
           docker tag theasp/fluentd-plugins:common theasp/fluentd-plugins:latest
+      - deploy: |
           docker push theasp/fluentd-plugins:common
           docker push theasp/fluentd-plugins:latest
 
 
-  # build-all:
+  # all:
   #   docker:
   #     - image: docker
   #   steps:
-  #     - setup_remote_docker:
-  #         docker_layer_caching: true
+  #     - setup_remote_docker
   #     - checkout
   #     - run: |
   #         docker image build -t theasp/fluentd-plugins:all -f Dockerfile-all .
@@ -56,10 +55,10 @@ workflows:
   version: 2
   build:
     jobs:
-      - build-certified
-      - build-slim:
+      - certified
+      - slim:
           requires:
-            - build-certified
-      - build-common:
+            - certified
+      - common:
           requires:
-            - build-slim
+            - slim
