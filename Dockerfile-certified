@@ -1,19 +1,3 @@
 FROM fluent/fluentd:edge-debian
-
-ENV BUILD_DEPS="jq curl make gcc g++ rake patch libc-dev ruby-dev zlib1g-dev libcurl4-openssl-dev libpq-dev libssl-dev libsqlite3-dev default-libmysqlclient-dev libgeoip-dev libsasl2-dev libxml2-dev libffi-dev libmaxminddb-dev"
-
-RUN set -ex ; \
-   sed -r -i -e 's! main! main contrib non-free!g' /etc/apt/sources.list; \
-   cat /etc/apt/sources.list ; \
-   apt-get update -q; \
-   apt-get install -qy --no-install-recommends $BUILD_DEPS; \
-   curl -s https://www.fluentd.org/plugins \
-     | grep '^  var plugins'\
-     | cut -f 2- -d = \
-     | sed -e 's/;$//' \
-     | jq -r 'map(select(.obsolete != true and (.certified|length) > 0)) | .[].name | @text' > /plugins-installed; \
-   test -s /plugins-installed; \
-   xargs -r gem install < /plugins-installed; \
-   gem sources --clear-all ; \
-   apt-get purge -qy $(dpkg-query --show --showformat '${Package}\n' '*-dev'); \
-   rm -rf /var/lib/apt/lists/* /home/fluent/.gem/ruby/*/cache/*.gem /tmp/plugins
+COPY build.bash /build.bash
+RUN /build.bash certified
