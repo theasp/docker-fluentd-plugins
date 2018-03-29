@@ -30,7 +30,7 @@ if ! curl -s https://www.fluentd.org/plugins \
     | cut -f 2- -d = \
     | sed -e 's/;$//' \
     | jq -r "$JQ" \
-    | grep -v "$SKIP" \
+    | egrep -v "$SKIP" \
     | xargs -r gem install;
 then
   if [[ $ALLOW_FAIL != true ]]; then
