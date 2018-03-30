@@ -8,11 +8,6 @@ JQ=''
 SKIP='^$'
 ALLOW_FAIL=false
 
-sed -r -i -e 's! main! main contrib non-free!g' /etc/apt/sources.list
-
-apt-get update -q
-apt-get install -qy --no-install-recommends $BUILD_DEPS
-
 case $1 in
   certified) JQ='map(select(.obsolete != true and (.certified|length) > 0)) | .[].name | @text' ;;
   slim)      JQ='map(select(.obsolete != true and (.downloads > 20000 or (.certified|length) > 0))) | .[].name | @text' ;;
@@ -22,8 +17,13 @@ case $1 in
              ALLOW_FAIL=true ;;
   *)
     echo "Unknown build type: $1"
-    exit 1;;
+    exit 1 ;;
 esac
+
+sed -r -i -e 's! main! main contrib non-free!g' /etc/apt/sources.list
+
+apt-get update -q
+apt-get install -qy --no-install-recommends $BUILD_DEPS
 
 if ! curl -s https://www.fluentd.org/plugins \
     | grep '^  var plugins' \
