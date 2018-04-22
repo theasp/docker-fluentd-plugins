@@ -2,9 +2,6 @@
 version: 2
 jobs:
   build:
-    branches:
-      only:
-        - master
     docker:
       - image: docker
     steps:
@@ -12,19 +9,17 @@ jobs:
       - checkout
       - run: |
           docker image build -t theasp/fluentd-plugins:certified -f Dockerfile-certified .
-          echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-          docker push theasp/fluentd-plugins:certified
-      - run: |
           docker image build -t theasp/fluentd-plugins:slim -f Dockerfile-slim .
-          echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-          docker push theasp/fluentd-plugins:slim
-      - run: |
           docker image build -t theasp/fluentd-plugins:common -f Dockerfile-common .
+      - deploy: |
+          if [ "${CIRCLE_BRANCH}" == "master" ]; then
           echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-          docker tag theasp/fluentd-plugins:common theasp/fluentd-plugins:latest
-          docker push theasp/fluentd-plugins:common
-          docker push theasp/fluentd-plugins:latest
-
+            docker tag theasp/fluentd-plugins:common theasp/fluentd-plugins:latest
+            docker push theasp/fluentd-plugins:certified
+            docker push theasp/fluentd-plugins:slim
+            docker push theasp/fluentd-plugins:common
+            docker push theasp/fluentd-plugins:latest
+          fi
 
 workflows:
   version: 2
