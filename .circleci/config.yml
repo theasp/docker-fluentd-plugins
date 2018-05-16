@@ -30,7 +30,7 @@ workflows:
   weekly:
     triggers:
       - schedule:
-          cron: "0 12 2 * *"
+          cron: "0 12 * * 2"
           filters:
             branches:
               only:
