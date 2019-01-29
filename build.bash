@@ -12,7 +12,7 @@ case $1 in
   certified) JQ='map(select(.obsolete != true and (.certified|length) > 0)) | .[].name | @text' ;;
   slim)      JQ='map(select(.obsolete != true and (.downloads > 20000 or (.certified|length) > 0))) | .[].name | @text' ;;
   common)    JQ='map(select(.obsolete != true and (.downloads > 5000 or (.certified|length) > 0))) | .[].name | @text'
-             SKIP='^fluent-plugin-(chef-client|grassland|mysql-binlog|monolog|filter-list|couchbase)$' ;;
+             SKIP='^fluent-plugin-(chef-client|grassland|mysql-binlog|monolog|filter-list|couchbase|splunk-hec)$' ;;
   all)       JQ='map(select(.obsolete != true) | .[].name | @text'
              ALLOW_FAIL=true ;;
   *)
