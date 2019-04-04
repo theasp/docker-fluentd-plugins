@@ -5,15 +5,15 @@ set -o pipefail
 
 BUILD_DEPS="jq curl make gcc g++ rake patch libc-dev ruby-dev zlib1g-dev libcurl4-openssl-dev libpq-dev libssl-dev libsqlite3-dev default-libmysqlclient-dev libgeoip-dev libsasl2-dev libxml2-dev libffi-dev libmaxminddb-dev ruby-aws-sdk"
 JQ=''
-SKIP='^$'
 ALLOW_FAIL=false
+SKIP='^fluent-plugin-(geoblipper|chef-client|grassland|mysql-binlog|monolog|filter-list|couchbase|splunk-hec)$'
 
 case $1 in
   certified) JQ='map(select(.obsolete != true and (.certified|length) > 0)) | .[].name | @text' ;;
   slim)      JQ='map(select(.obsolete != true and (.downloads > 20000 or (.certified|length) > 0))) | .[].name | @text' ;;
-  common)    JQ='map(select(.obsolete != true and (.downloads > 5000 or (.certified|length) > 0))) | .[].name | @text'
-             SKIP='^fluent-plugin-(chef-client|grassland|mysql-binlog|monolog|filter-list|couchbase|splunk-hec)$' ;;
+  common)    JQ='map(select(.obsolete != true and (.downloads > 5000 or (.certified|length) > 0))) | .[].name | @text' ;;
   all)       JQ='map(select(.obsolete != true) | .[].name | @text'
+             SKIP='^$'
              ALLOW_FAIL=true ;;
   *)
     echo "Unknown build type: $1"
