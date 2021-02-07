@@ -27,7 +27,7 @@ jobs:
               docker push theasp/fluentd-plugins:edge-certified
               docker push theasp/fluentd-plugins:edge-slim
               docker push theasp/fluentd-plugins:edge-common
-              docker push theasp/fluentd-plugins:edge-latest
+              docker push theasp/fluentd-plugins:edge
             fi
 
 workflows:
