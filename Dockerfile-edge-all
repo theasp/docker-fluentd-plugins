@@ -1,0 +1,2 @@
+FROM theasp/fluentd-plugins:edge-common
+RUN /build.bash all

@@ -1,0 +1,3 @@
+FROM fluent/fluentd:edge-debian
+COPY build.bash /build.bash
+RUN apt-get update && apt-get install -qy bash && /build.bash certified

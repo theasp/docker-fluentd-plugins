@@ -1,0 +1,2 @@
+FROM theasp/fluentd-plugins:edge-certified
+RUN /build.bash slim
