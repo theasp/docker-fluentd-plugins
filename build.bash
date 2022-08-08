@@ -6,7 +6,7 @@ set -o pipefail
 BUILD_DEPS=(jq curl make gcc g++ rake patch libc-dev ruby-dev zlib1g-dev libcurl4-openssl-dev libpq-dev libssl-dev libsqlite3-dev default-libmysqlclient-dev libgeoip-dev libsasl2-dev libxml2-dev libffi-dev libmaxminddb-dev ruby-aws-sdk)
 JQ=''
 ALLOW_FAIL=true
-SKIP='^fluent-plugin-(geoblipper|chef-client|grassland|mysql-binlog|monolog|filter-list|couchbase|splunk-hec|azure-loganalytics|amplifier-filter)$'
+SKIP='^fluent-plugin-(geoblipper|chef-client|grassland|mysql-binlog|monolog|filter-list|couchbase|splunk-hec|azure-loganalytics|amplitude)$'
 
 function main {
   local series=$1
