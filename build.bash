@@ -32,15 +32,24 @@ function install_deps {
 function install_plugins {
   local series=$1
 
-  local -a plugins=()
+  echo "About to install for series ${series}:"
+  plugins_to_install "${series}" | sed -re 's/^/  - /'
 
-  if ! comm -13 <(plugins_installed) <(plugins_for_series "${series}") | xargs -r gem install; then
+  if ! plugins_to_install "${series}" | xargs -r gem install; then
     if [[ $ALLOW_FAIL != true ]]; then
       echo "ERROR: Problem installing packages for ${series}" 1>&2
       exit 1
     fi
   fi
 }
+
+function plugins_to_install {
+  local series=$1
+
+  comm -13 <(plugins_installed) <(plugins_for_series "${series}")
+}
+
+
 
 function plugins_installed {
   gem list --installed \
