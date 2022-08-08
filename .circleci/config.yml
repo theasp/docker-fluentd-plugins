@@ -16,6 +16,7 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
               docker tag theasp/fluentd-plugins:common theasp/fluentd-plugins:latest
+              docker image ls
               docker push theasp/fluentd-plugins:certified
               docker push theasp/fluentd-plugins:slim
               docker push theasp/fluentd-plugins:common
@@ -36,6 +37,7 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
               docker tag theasp/fluentd-plugins:edge-common theasp/fluentd-plugins:edge
+              docker image ls
               docker push theasp/fluentd-plugins:edge-certified
               docker push theasp/fluentd-plugins:edge-slim
               docker push theasp/fluentd-plugins:edge-common
