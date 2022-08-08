@@ -45,6 +45,7 @@ function install_plugins {
 function plugins_installed {
   gem list --installed \
     | egrep ^fluent-plugin- \
+    | awk '{ print $1 }' \
     | sort
 }
 
