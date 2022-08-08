@@ -35,12 +35,16 @@ function install_plugins {
   echo "About to install for series ${series}:"
   plugins_to_install "${series}" | sed -re 's/^/  - /'
 
-  if ! plugins_to_install "${series}" | xargs -tr gem install; then
-    if [[ $ALLOW_FAIL != true ]]; then
-      echo "ERROR: Problem installing packages for ${series}" 1>&2
-      exit 1
+  for plugin in $(plugins_to_install "${series}"); do
+    if ! gem install "${plugin}"; then
+      if [[ $ALLOW_FAIL != true ]]; then
+        echo "ERROR: Problem installing plugin ${plugin} for ${series}" 1>&2
+        exit 1
+      else
+        echo "WARNING: Problem installing plugin ${plugin} for ${series}" 1>&2
+      fi
     fi
-  fi
+  done
 }
 
 function plugins_to_install {
