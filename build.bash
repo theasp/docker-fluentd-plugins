@@ -32,19 +32,20 @@ function install_deps {
 function install_plugins {
   local series=$1
 
-  for plugin in $(plugins_for_series "${series}"); do
-    if gem list --installed --exact "${plugin}" 1>/dev/null 2>&1; then
-      continue
+  local -a plugins=()
+
+  if ! comm -13 <(plugins_installed) <(plugins_for_series "${series}") | xargs -r gem install; then
+    if [[ $ALLOW_FAIL != true ]]; then
+      echo "ERROR: Problem installing packages for ${series}" 1>&2
+      exit 1
     fi
-    if ! gem install "${plugin}"; then
-      if [[ $ALLOW_FAIL != true ]]; then
-        echo "ERROR: Unsable to install package ${plugin} in series ${series}" 1>&2
-        exit 1
-      else
-        echo "WARNING: Unsable to install package ${plugin} in series ${series}" 1>&2
-      fi
-    fi
-  done
+  fi
+}
+
+function plugins_installed {
+  gem list --installed \
+    | egrep ^fluent-plugin- \
+    | sort
 }
 
 function plugins_for_series {
