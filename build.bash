@@ -35,7 +35,7 @@ function install_plugins {
   echo "About to install for series ${series}:"
   plugins_to_install "${series}" | sed -re 's/^/  - /'
 
-  if ! plugins_to_install "${series}" | xargs -r gem install; then
+  if ! plugins_to_install "${series}" | xargs -tr gem install; then
     if [[ $ALLOW_FAIL != true ]]; then
       echo "ERROR: Problem installing packages for ${series}" 1>&2
       exit 1
