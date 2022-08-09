@@ -29,6 +29,26 @@ function install_deps {
 
 function install_plugins {
   local series=$1
+  install_plugins_slow "$series"
+}
+
+function install_plugins_slow {
+  local series=$1
+
+  for plugin in $(plugins_for_series "${series}"); do
+    if ! gem install "${plugin}"; then
+      if [[ $ALLOW_FAIL != true ]]; then
+        echo "ERROR: Problem installing plugin ${plugin} for ${series}" 1>&2
+        exit 1
+      else
+        echo "WARNING: Problem installing plugin ${plugin} for ${series}" 1>&2
+      fi
+    fi
+  done
+}
+
+function install_plugins_fast {
+  local series=$1
 
   if ! (plugins_for_series "${series}" | xargs -tr gem install); then
     if [[ $ALLOW_FAIL != true ]]; then
@@ -37,6 +57,7 @@ function install_plugins {
     fi
   fi
 }
+
 
 function plugins_for_series {
   local series=$1
