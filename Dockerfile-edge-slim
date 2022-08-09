@@ -1,2 +1,5 @@
-FROM theasp/fluentd-plugins:edge-certified
+FROM fluent/fluentd:edge-debian
+USER root
+COPY build.bash /build.bash
+RUN apt-get update && apt-get install -qy bash && /build.bash certified
 RUN /build.bash slim
