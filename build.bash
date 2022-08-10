@@ -70,7 +70,8 @@ function plugins_for_series {
   fi
 
   case $1 in
-    certified) JQ='map(select(.obsolete != true and (.certified|length) > 0)) | .[].name | @text' ;;
+    certified) JQ='map(select(.obsolete != true and (.certified|length) > 0)) | .[].name | @text'
+               ALLOW_FAIL=false ;;
     slim)      JQ='map(select(.obsolete != true and (.downloads >= 20000 and (.certified|length) == 0))) | .[].name | @text' ;;
     common)    JQ='map(select(.obsolete != true and (.downloads < 20000 and .downloads >= 5000 and (.certified|length) == 0))) | .[].name | @text' ;;
     all)       JQ='map(select(.obsolete != true) | .[].name | @text'
